@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NusantaraBeat AI Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #030712;
+            color: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        /* FRAME UTAMA YANG AMAN UNTUK MOBILE & PC WINDOWS */
+        header, .container, .bottom-nav, #toast-container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        header {
+            background: rgba(10, 15, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e293b;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .app-logo {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 7px;
+            border-radius: 10px;
+            color: #34d399;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .app-title h1 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #34d399;
+            letter-spacing: 0.5px;
+        }
+        .app-title p {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .card {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #f8fafc;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            user-select: none;
+        }
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header i {
+            color: #34d399;
+            width: 16px;
+            height: 16px;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        label {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%;
+            background-color: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 12px;
+            color: #f8fafc;
+            font-size: 12px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+
+        .creator-toolbar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .chip-btn {
+            background: #020617;
+            border: 1px solid #1e293b;
+            color: #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .chip-btn:hover {
+            border-color: #10b981;
+            color: #34d399;
+        }
+        .chip-btn.active {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+            color: #34d399;
+        }
+
+        .top-action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+            padding: 8px 12px;
+        }
+        .action-pill-group {
+            display: flex;
+            gap: 6px;
+        }
+        .action-pill {
+            background: #020617;
+            border: 1px solid #1e293b;
+            color: #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .action-pill:hover {
+            border-color: #10b981;
+            color: #34d399;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #0d9488);
+            color: #020617;
+            font-weight: 700;
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .btn-secondary {
+            background: #1e293b;
+            color: #34d399;
+            border: 1px solid #334155;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .login-btn-profile {
+            background: linear-gradient(135deg, #10b981, #0d9488);
+            color: #020617;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* TOAST NOTIFICATION STYLING (TURUN DARI ATAS) */
+        #toast-container {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            pointer-events: none;
+            padding: 0 16px;
+        }
+        .toast-item {
+            background: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #10b981;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-size: 11px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(-40px);
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: auto;
+            width: 100%;
+        }
+        .toast-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .toast-item.error {
+            border-color: #f43f5e;
+            color: #f43f5e;
+        }
+
+        /* Modal Overlay Popups */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 10px;
+        }
+        .modal-header h2 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #34d399;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+        /* Status & Audio Player Box with Equalizer */
+        .status-box {
+            display: none;
+            background: #0f172a;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 16px;
+            padding: 16px;
+            gap: 12px;
+            flex-direction: column;
+        }
+        .status-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #1e293b;
+            border-top: 2px solid #34d399;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .progress-track {
+            width: 100%;
+            background: #020617;
+            border-radius: 99px;
+            height: 6px;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #10b981, #2dd4bf);
+            height: 100%;
+            width: 30%;
+            transition: width 0.5s ease;
+        }
+
+        /* Equalizer Spectrum Bars */
+        .equalizer-spectrum {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 4px;
+            height: 28px;
+            margin: 6px 0;
+        }
+        .eq-bar {
+            width: 5px;
+            background: #34d399;
+            border-radius: 4px;
+            animation: bounceEq 0.8s infinite ease-in-out alternate;
+        }
+        .eq-bar:nth-child(1) { animation-duration: 0.5s; }
+        .eq-bar:nth-child(2) { animation-duration: 0.7s; animation-delay: 0.1s; }
+        .eq-bar:nth-child(3) { animation-duration: 0.4s; animation-delay: 0.2s; }
+        .eq-bar:nth-child(4) { animation-duration: 0.6s; animation-delay: 0.15s; }
+        .eq-bar:nth-child(5) { animation-duration: 0.8s; animation-delay: 0.25s; }
+        .eq-bar:nth-child(6) { animation-duration: 0.5s; animation-delay: 0.05s; }
+
+        @keyframes bounceEq {
+            0% { height: 4px; }
+            100% { height: 26px; }
+        }
+
+        audio {
+            width: 100%;
+            height: 36px;
+            border-radius: 8px;
+            outline: none;
+            margin-top: 4px;
+        }
+        .download-btn-link {
+            display: inline-block;
+            background: #10b981;
+            color: #020617;
+            font-weight: 700;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 15, 30, 0.98);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #1e293b;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            z-index: 200;
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: color 0.2s;
+        }
+        .nav-item.active {
+            color: #34d399;
+        }
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .view-section {
+            display: none;
+            width: 100%;
+        }
+        .view-section.active {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WADAH TOAST NOTIFICATION -->
+    <div id="toast-container"></div>
+
+    <!-- APP HEADER -->
+    <header>
+        <div class="app-title">
+            <div class="app-logo">
+                <i data-lucide="disc" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <h1>NusantaraBeat AI</h1>
+                <p>Studio Musik & DJ Lokal</p>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ================= MODAL POP-UP: PILIH MODEL AI ================= -->
+    <div id="model-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i data-lucide="cpu" class="w-4 h-4"></i> Pilih Model AI Studio</h2>
+                <button onclick="closeModelModal()" class="close-modal"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button onclick="selectModel('v1-local')" class="btn-secondary" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="zap" class="w-4 h-4 text-emerald-400"></i> v1-local (Rekomendasi Indobounce & BKB)
+                </button>
+                <button onclick="selectModel('gemini-2.5-flash')" class="btn-secondary" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="rocket" class="w-4 h-4 text-blue-400"></i> Google Gemini 2.5 Flash
+                </button>
+                <button onclick="selectModel('gemini-1.5-pro')" class="btn-secondary" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="gem" class="w-4 h-4 text-purple-400"></i> Google Gemini 1.5 Pro
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= MODAL POP-UP: AKSI LAGU (LIBRARY) ================= -->
+    <div id="song-action-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i data-lucide="music" class="w-4 h-4"></i> Opsi Lagu</h2>
+                <button onclick="closeSongModal()" class="close-modal"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <p id="modal-song-title" style="font-size: 12px; color: #34d399; font-weight: 600;"></p>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                <button onclick="playSelectedSong()" class="btn-primary" style="padding: 10px;"><i data-lucide="play" class="w-4 h-4"></i> Putar Lagu</button>
+                <button onclick="downloadSelectedSong()" class="btn-secondary" style="padding: 10px; text-align: center;"><i data-lucide="download" class="w-4 h-4"></i> Unduh File MP3</button>
+                <button onclick="deleteSelectedSong()" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus dari Perpustakaan
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= APP WORKSPACE (5 TABS) ================= -->
+    <main class="container">
+
+        <!-- TAB 1: HOME / BERANDA -->
+        <div id="view-home" class="view-section">
+            <div class="card" style="background: linear-gradient(135deg, #0f172a, #091122);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 style="font-size: 14px; font-weight: 700; color: #34d399;">Beranda Kreator</h2>
+                        <p style="font-size: 11px; color: #94a3b8;">Jelajahi tren Indobounce & Breakbeat lokal.</p>
+                    </div>
+                    <i data-lucide="radio" class="w-6 h-6 text-emerald-400"></i>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="card" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); padding: 14px; cursor: pointer;" onclick="switchTab('creator')">
+                    <p style="font-size: 12px; font-weight: 700;">Indobounce</p>
+                    <span style="font-size: 10px; opacity: 0.8;">Heavy Sub-Bass</span>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #ec4899, #be185d); padding: 14px; cursor: pointer;" onclick="switchTab('creator')">
+                    <p style="font-size: 12px; font-weight: 700;">Breakbeat BKB</p>
+                    <span style="font-size: 10px; opacity: 0.8;">TikTok Viral Mix</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: SEARCH / MENCARI -->
+        <div id="view-search" class="view-section">
+            <div class="card">
+                <div class="form-group">
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <i data-lucide="search" style="position: absolute; left: 12px; color: #64748b; width: 16px; height: 16px;"></i>
+                        <input type="text" id="search-input" placeholder="Cari lagu, genre, atau kreator..." style="padding-left: 38px;" oninput="handleSearch(this.value)">
+                    </div>
+                </div>
+            </div>
+            <div class="card" id="search-results-card" style="display: none;">
+                <div class="card-header"><div class="card-header-left"><i data-lucide="list"></i><span>Hasil Pencarian</span></div></div>
+                <div class="card-body" id="search-results-list"></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: AI MUSIC CREATOR (STUDIO) -->
+        <div id="view-creator" class="view-section">
+            <div class="top-action-bar">
+                <div class="action-pill-group">
+                    <button class="action-pill" onclick="triggerAudioUpload()">
+                        <i data-lucide="mic" class="w-3.5 h-3.5 text-emerald-400"></i> + Audio
+                    </button>
+                    <button class="action-pill" onclick="toggleVoiceRecorder()">
+                        <i data-lucide="headphones" class="w-3.5 h-3.5 text-emerald-400"></i> + Voice
+                    </button>
+                </div>
+                <button class="action-pill" onclick="openModelModal()" style="color: #34d399; font-weight: 700; border: none; background: #020617;" id="active-model-pill">
+                    v1-local <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+
+            <input type="file" id="hidden-audio-input" accept="audio/*" style="display: none;" onchange="onAudioSelected(event)">
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <i data-lucide="youtube"></i>
+                        <span>Sumber Link YouTube (Opsional)</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 text-slate-400 transition-transform"></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="text" id="yt-link" placeholder="https://youtube.com/watch?v=...">
+                        <span style="font-size: 9px; color: #64748b;">Ekstrak audio/vokal asli dari YouTube secara instan.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIRIK CARD -->
+            <div class="card" id="lyrics-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <i data-lucide="file-text"></i>
+                        <span>Lirik</span>
+                        <span id="lyrics-status-badge" style="font-size: 9px; background: rgba(16,185,129,0.15); color: #34d399; padding: 2px 6px; border-radius: 6px; display: none; margin-left: 6px;"></span>
+                    </div>
+                    <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 text-slate-400 transition-transform"></i>
+                </div>
+                
+                <div class="card-body" id="lyrics-card-body">
+                    <div class="form-group">
+                        <textarea id="ai-lyrics" placeholder="Masukkan lirikmu sendiri atau buat deskripsi lagu..."></textarea>
+                    </div>
+
+                    <div class="creator-toolbar">
+                        <button class="chip-btn" onclick="clearText('ai-lyrics')"><i data-lucide="align-left" class="w-3 h-3"></i> Bersihkan</button>
+                        <button class="chip-btn" onclick="autoFillLyrics()"><i data-lucide="sparkles" class="w-3 h-3 text-emerald-400"></i> Auto Lirik</button>
+                        <button class="chip-btn" id="btn-instrumental" onclick="toggleInstrumental(this)">
+                            <i data-lucide="music-2" class="w-3 h-3"></i> Instrumental
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <i data-lucide="sliders-horizontal"></i>
+                        <span>Gaya</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 text-slate-400 transition-transform"></i>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <textarea id="ai-prompt" placeholder="Describe what you want your song to sound like"></textarea>
+                    </div>
+
+                    <div class="creator-toolbar">
+                        <button class="chip-btn" onclick="clearText('ai-prompt')"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Reset</button>
+                        <button class="chip-btn" onclick="addTag('indonesian indobounce')">indobounce</button>
+                        <button class="chip-btn" onclick="addTag('tiktok breakbeat')">breakbeat</button>
+                        <button class="chip-btn" onclick="addTag('chipmunk female vocal')">vocal</button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="startProcess()" class="btn-primary">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>Buat</span>
+            </button>
+        </div>
+
+
+        <!-- TAB 4: PERPUSTAKAAN (LIBRARY) -->
+        <div id="view-library" class="view-section">
+            <h2 style="font-size: 16px; font-weight: 700; color: #f8fafc;">Perpustakaan</h2>
+            <div class="card">
+                <div class="card-header"><div class="card-header-left"><i data-lucide="music"></i><span>Lagu Saya Tersimpan</span></div></div>
+                <div class="card-body" id="library-songs-list" style="margin-top: 8px; gap: 8px;"></div>
+            </div>
+        </div>
+
+
+        <!-- TAB 5: PROFIL KREATOR (PENGATURAN & GMAIL) -->
+        <div id="view-profile" class="view-section">
+            <div class="card" style="background: linear-gradient(135deg, #1e1b4b, #0f172a);" id="profile-card-info">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #34d399; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #020617; font-size: 18px;" id="profile-initials">?</div>
+                    <div>
+                        <h2 style="font-size: 14px; font-weight: 700; color: #f8fafc;" id="profile-name">Tamu (Belum Masuk)</h2>
+                        <p style="font-size: 10px; color: #f43f5e;" id="profile-handle">Silakan login terlebih dahulu</p>
+                        <p style="font-size: 10px; color: #94a3b8; margin-top: 2px;" id="profile-stats">0 Suka • 0 Lagu</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><div class="card-header-left"><i data-lucide="mail"></i><span>Autentikasi Akun</span></div></div>
+                <div class="card-body">
+                    <div id="login-container">
+                        <button onclick="simulateLogin()" class="login-btn-profile">Masuk dengan Gmail</button>
+                    </div>
+                    <div id="user-profile-status" style="display: none; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 11px; color: #34d399;">Status: Terhubung ke Gmail (@rifbyazra71)</span>
+                        <button onclick="logout()" class="logout-btn" style="background:none; border:none; color:#f43f5e; cursor:pointer; font-weight:bold;">Keluar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><div class="card-header-left"><i data-lucide="settings"></i><span>Pengaturan AI & API Key</span></div></div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>API Key Gemini AI Anda</label>
+                        <input type="password" id="setting-api-key" placeholder="Masukkan API Key...">
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+                        <button onclick="testApiKeyConnection()" class="btn-secondary" style="flex: 1;">Tes Koneksi AI</button>
+                        <span id="test-status" style="font-size: 11px; color: #94a3b8;">Belum diuji</span>
+                    </div>
+                    <button onclick="saveSettings()" class="btn-primary" style="margin-top: 8px;">
+                        <i data-lucide="check" class="w-4 h-4"></i> Simpan Pengaturan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- STATUS FEED & AUDIO PREVIEW (DENGAN EQUALIZER) -->
+        <div id="result-box" class="status-box">
+            <div class="status-flex">
+                <div id="status-spinner" class="spinner"></div>
+                <span id="status-text" style="font-size: 11px; color: #34d399; font-weight: 500;">v1-local sedang meracik musik...</span>
+            </div>
+            <div id="progress-container" class="progress-track">
+                <div id="progress-bar" class="progress-fill"></div>
+            </div>
+            <div id="audio-preview-container" style="display: none; flex-direction: column; gap: 6px;">
+                <!-- Equalizer Visualizer Spectrum -->
+                <div class="equalizer-spectrum">
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                </div>
+                <audio id="audio-player" controls></audio>
+                <a id="download-anchor" class="download-btn-link" download="nusantarabeat-result.mp3">Unduh File MP3</a>
+            </div>
+        </div>
+
+    </main>
+
+
+    <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+    <nav class="bottom-nav">
+        <button onclick="switchTab('home')" id="nav-home" class="nav-item">
+            <i data-lucide="play-square"></i>
+            <span>Beranda</span>
+        </button>
+        <button onclick="switchTab('search')" id="nav-search" class="nav-item">
+            <i data-lucide="search"></i>
+            <span>Cari</span>
+        </button>
+        <button onclick="switchTab('creator')" id="nav-creator" class="nav-item">
+            <i data-lucide="sparkles"></i>
+            <span>Studio</span>
+        </button>
+        <button onclick="switchTab('library')" id="nav-library" class="nav-item">
+            <i data-lucide="list-music"></i>
+            <span>Perpustakaan</span>
+        </button>
+        <button onclick="switchTab('profile')" id="nav-profile" class="nav-item active">
+            <i data-lucide="user"></i>
+            <span>Profil</span>
+        </button>
+    </nav>
+
+
+    <!-- SCRIPT -->
+    <script>
+        let defaultSongs = [
+            { title: "DJ Jinkey - Sakitnya Menusuk V1", duration: "5:22" },
+            { title: "Nusantara Indobounce Heavy Drop", duration: "3:45" }
+        ];
+        let myLibrarySongs = JSON.parse(localStorage.getItem('nusantarabeat_library')) || defaultSongs;
+        let currentSelectedSong = null;
+        let isLoggedIn = localStorage.getItem('is_logged_in') === 'true';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            loadSettings();
+            renderLibrary();
+            updateAuthUI();
+
+            if (!isLoggedIn) {
+                switchTab('profile');
+                showToast("Harap Masuk dengan Gmail terlebih dahulu!", "error");
+            } else {
+                switchTab('creator');
+            }
+        });
+
+        function saveLibraryToStorage() {
+            localStorage.setItem('nusantarabeat_library', JSON.stringify(myLibrarySongs));
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast-item ${type}`;
+            
+            const iconName = type === 'success' ? 'check-circle' : 'alert-triangle';
+            toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 flex-shrink-0 text-emerald-400"></i> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 20);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 350);
+            }, 3000);
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+
+        function switchTab(tabName) {
+            if (!isLoggedIn && (tabName === 'creator' || tabName === 'library')) {
+                showToast("Harap Masuk dengan Gmail terlebih dahulu!", "error");
+                tabName = 'profile';
+            }
+
+            const tabs = ['home', 'search', 'creator', 'library', 'profile'];
+            tabs.forEach(t => {
+                document.getElementById(`view-${t}`).classList.remove('active');
+                document.getElementById(`nav-${t}`).classList.remove('active');
+            });
+
+            document.getElementById(`view-${tabName}`).classList.add('active');
+            document.getElementById(`nav-${tabName}`).classList.add('active');
+            document.getElementById('result-box').style.display = 'none';
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+
+        function updateAuthUI() {
+            isLoggedIn = localStorage.getItem('is_logged_in') === 'true';
+            const loginContainer = document.getElementById('login-container');
+            const profileStatus = document.getElementById('user-profile-status');
+            const initials = document.getElementById('profile-initials');
+            const nameEl = document.getElementById('profile-name');
+            const handleEl = document.getElementById('profile-handle');
+            const statsEl = document.getElementById('profile-stats');
+
+            if (isLoggedIn) {
+                loginContainer.style.display = 'none';
+                profileStatus.style.display = 'flex';
+                initials.innerText = "KJ";
+                nameEl.innerText = "Key Jinkey";
+                handleEl.innerText = "@rifbyazra71";
+                handleEl.style.color = "#34d399";
+                statsEl.innerText = `284 Suka • ${myLibrarySongs.length} Lagu`;
+            } else {
+                loginContainer.style.display = 'block';
+                profileStatus.style.display = 'none';
+                initials.innerText = "?";
+                nameEl.innerText = "Tamu (Belum Masuk)";
+                handleEl.innerText = "Silakan login terlebih dahulu";
+                handleEl.style.color = "#f43f5e";
+                statsEl.innerText = "0 Suka • 0 Lagu";
+            }
+        }
+
+        function simulateLogin() {
+            localStorage.setItem('is_logged_in', 'true');
+            updateAuthUI();
+            showToast("Berhasil masuk menggunakan akun Google/Gmail!");
+            switchTab('creator');
+        }
+
+        function logout() {
+            localStorage.setItem('is_logged_in', 'false');
+            updateAuthUI();
+            showToast("Anda telah keluar dari akun.", "error");
+            switchTab('profile');
+        }
+
+        function openModelModal() { 
+            if (!isLoggedIn) { showToast("Login terlebih dahulu!", "error"); return; }
+            document.getElementById('model-modal').style.display = 'flex'; 
+        }
+        function closeModelModal() { document.getElementById('model-modal').style.display = 'none'; }
+        function selectModel(modelName) {
+            document.getElementById('active-model-pill').innerHTML = `${modelName} <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>`;
+            localStorage.setItem('user_ai_model', modelName);
+            closeModelModal();
+            showToast(`Model AI diubah ke: ${modelName}`);
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+
+        function openSongModal(index) {
+            currentSelectedSong = index;
+            document.getElementById('modal-song-title').innerText = myLibrarySongs[index].title;
+            document.getElementById('song-action-modal').style.display = 'flex';
+        }
+        function closeSongModal() { document.getElementById('song-action-modal').style.display = 'none'; }
+
+        function playSelectedSong() {
+            closeSongModal();
+            switchTab('creator');
+            const resultBox = document.getElementById('result-box');
+            resultBox.style.display = 'flex';
+            document.getElementById('status-spinner').style.display = 'none';
+            document.getElementById('progress-container').style.display = 'none';
+            document.getElementById('status-text').innerHTML = `Memutar: ${myLibrarySongs[currentSelectedSong].title}`;
+            const previewContainer = document.getElementById('audio-preview-container');
+            previewContainer.style.display = 'flex';
+            document.getElementById('audio-player').src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+            showToast(`Memutar lagu: ${myLibrarySongs[currentSelectedSong].title}`);
+        }
+
+        function downloadSelectedSong() {
+            showToast(`Mengunduh file MP3: ${myLibrarySongs[currentSelectedSong].title}`);
+            closeSongModal();
+        }
+
+        function deleteSelectedSong() {
+            if(confirm("Hapus lagu ini dari perpustakaan?")) {
+                const removed = myLibrarySongs.splice(currentSelectedSong, 1);
+                saveLibraryToStorage();
+                renderLibrary();
+                closeSongModal();
+                showToast(`Lagu "${removed[0].title}" dihapus.`, 'error');
+                updateAuthUI();
+            }
+        }
+
+        function renderLibrary() {
+            const listContainer = document.getElementById('library-songs-list');
+            if(myLibrarySongs.length === 0) {
+                listContainer.innerHTML = `<p style="font-size: 10px; color: #64748b;">Belum ada lagu tersimpan.</p>`;
+                return;
+            }
+            listContainer.innerHTML = myLibrarySongs.map((song, idx) => `
+                <div onclick="openSongModal(${idx})" style="background:#020617; border:1px solid #1e293b; padding:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                    <span style="font-size:11px; color:#f8fafc; display:flex; align-items:center; gap:6px;">
+                        <i data-lucide="music" class="w-3.5 h-3.5 text-emerald-400"></i> ${song.title}
+                    </span>
+                    <span style="font-size:10px; color:#34d399;">${song.duration}</span>
+                </div>
+            `).join('');
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+
+        function saveSettings() {
+            const keyVal = document.getElementById('setting-api-key').value;
+            localStorage.setItem('user_api_key', keyVal);
+            showToast("Pengaturan API Key berhasil disimpan!");
+        }
+
+        function loadSettings() {
+            if(localStorage.getItem('user_api_key')) document.getElementById('setting-api-key').value = localStorage.getItem('user_api_key');
+            if(localStorage.getItem('user_ai_model')) {
+                const mdl = localStorage.getItem('user_ai_model');
+                document.getElementById('active-model-pill').innerHTML = `${mdl} <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>`;
+            }
+        }
+
+        async function testApiKeyConnection() {
+            const apiKey = document.getElementById('setting-api-key').value;
+            const statusLabel = document.getElementById('test-status');
+            if(!apiKey) { 
+                statusLabel.innerText = "Masukkan API Key"; 
+                showToast("Masukkan API Key terlebih dahulu!", "error");
+                return; 
+            }
+            statusLabel.innerText = "Menguji...";
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash?key=${apiKey}`);
+                if(res.ok) {
+                    statusLabel.innerText = "Koneksi Berhasil!";
+                    showToast("Koneksi API Gemini Berhasil!");
+                } else {
+                    statusLabel.innerText = "Ditolak";
+                    showToast("API Key ditolak oleh server Google.", "error");
+                }
+            } catch(e) { 
+                statusLabel.innerText = "Gagal"; 
+                showToast("Gagal menguji koneksi jaringan.", "error");
+            }
+        }
+
+        function toggleCard(headerEl) {
+            const card = headerEl.closest('.card');
+            const body = card.querySelector('.card-body');
+            const icon = headerEl.querySelector('.chevron-icon');
+            if(body.style.display === 'none') {
+                body.style.display = 'flex';
+                if(icon) icon.style.transform = 'rotate(0deg)';
+            } else {
+                body.style.display = 'none';
+                if(icon) icon.style.transform = 'rotate(-90deg)';
+            }
+        }
+
+        function toggleInstrumental(btn) { 
+            btn.classList.toggle('active'); 
+            const active = btn.classList.contains('active');
+            const lyricsCardBody = document.getElementById('lyrics-card-body');
+            const lyricsStatus = document.getElementById('lyrics-status-badge');
+            
+            if (active) {
+                lyricsCardBody.style.display = 'none';
+                lyricsStatus.style.display = 'inline-block';
+                lyricsStatus.innerText = 'Mode Instrumental (Tanpa Lirik)';
+                showToast("Mode Instrumental Aktif: Lirik disembunyikan");
+            } else {
+                lyricsCardBody.style.display = 'flex';
+                lyricsStatus.style.display = 'none';
+                showToast("Mode Instrumental Nonaktif");
+            }
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+
+        function addTag(tagText) {
+            const p = document.getElementById('ai-prompt');
+            p.value = p.value ? p.value + ", " + tagText : tagText;
+            showToast(`Tag ditambah: ${tagText}`);
+        }
+
+        function clearText(id) { 
+            document.getElementById(id).value = ''; 
+            showToast("Kolom berhasil dibersihkan");
+        }
+
+        function triggerAudioUpload() { document.getElementById('hidden-audio-input').click(); }
+        function onAudioSelected(e) {
+            if(e.target.files[0]) {
+                showToast(`Audio dimuat: ${e.target.files[0].name}`);
+            }
+        }
+
+        let isRecording = false;
+        async function toggleVoiceRecorder() {
+            if(!isRecording) {
+                try {
+                    await navigator.mediaDevices.getUserMedia({ audio: true });
+                    isRecording = true;
+                    showToast("Rekaman suara aktif (Merekam...)");
+                } catch(err) { 
+                    showToast("Akses mikrofon ditolak perangkat.", "error"); 
+                }
+            } else {
+                isRecording = false;
+                showToast("Rekaman suara berhasil disimpan!");
+            }
+        }
+
+        async function autoFillLyrics() {
+            const apiKey = localStorage.getItem('user_api_key');
+            const lyricsBox = document.getElementById('ai-lyrics');
+            const promptStyle = document.getElementById('ai-prompt').value || "Indobounce beat";
+
+            if (!apiKey) {
+                showToast("Masukkan API Key di tab Profil terlebih dahulu!", "error");
+                switchTab('profile');
+                return;
+            }
+
+            lyricsBox.value = "v1-local sedang meracik lirik...";
+            showToast("Meminta lirik dari Gemini AI...");
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `Buatkan lirik lagu singkat gaya gaul Indonesia untuk musik ${promptStyle} dengan format [Verse] dan [Drop].` }] }] })
+                });
+                const data = await res.json();
+                if (data.candidates) {
+                    lyricsBox.value = data.candidates[0].content.parts[0].text;
+                    showToast("Lirik berhasil dibuat!");
+                }
+            } catch(e) {
+                lyricsBox.value = "[Verse]\nMalam makin dingin...\n[Drop]\nIndobounce beat!";
+                showToast("Gagal terhubung, menggunakan lirik cadangan.", "error");
+            }
+        }
+
+        function startProcess() {
+            if (!isLoggedIn) {
+                showToast("Harap Masuk dengan Gmail terlebih dahulu!", "error");
+                switchTab('profile');
+                return;
+            }
+
+            const resultBox = document.getElementById('result-box');
+            const statusText = document.getElementById('status-text');
+            const progressBar = document.getElementById('progress-bar');
+            const spinner = document.getElementById('status-spinner');
+            const progressContainer = document.getElementById('progress-container');
+            const previewContainer = document.getElementById('audio-preview-container');
+
+            const ytLink = document.getElementById('yt-link').value;
+            const promptVal = document.getElementById('ai-prompt').value;
+
+            if(!promptVal && !ytLink) {
+                showToast("Isi link YouTube atau deskripsi Gaya terlebih dahulu!", "error");
+                return;
+            }
+
+            resultBox.style.display = 'flex';
+            spinner.style.display = 'block';
+            progressContainer.style.display = 'block';
+            previewContainer.style.display = 'none';
+
+            statusText.innerText = ytLink ? "Langkah 1/3: Mengekstrak link YouTube..." : "Langkah 1/3: Menerjemahkan prompt gaya musik...";
+            progressBar.style.width = "30%";
+
+            setTimeout(() => {
+                statusText.innerText = "Langkah 2/3: Meracik beat & audio tag...";
+                progressBar.style.width = "70%";
+            }, 2000);
+
+            setTimeout(() => {
+                statusText.innerText = "Langkah 3/3: Finishing file MP3!";
+                progressBar.style.width = "100%";
+            }, 4000);
+
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                progressContainer.style.display = 'none';
+                statusText.innerHTML = `Berhasil diracik!`;
+                previewContainer.style.display = 'flex';
+                document.getElementById('audio-player').src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+                
+                myLibrarySongs.unshift({ title: promptVal ? promptVal.substring(0, 25) + "..." : "YouTube Remix", duration: "4:15" });
+                saveLibraryToStorage();
+                
+                renderLibrary();
+                updateAuthUI();
+                showToast("Lagu baru berhasil disimpan ke Perpustakaan!");
+
+                setTimeout(() => lucide.createIcons(), 50);
+            }, 6000);
+        }
+
+        function handleSearch(query) {
+            const resCard = document.getElementById('search-results-card');
+            const resList = document.getElementById('search-results-list');
+            if(!query) {
+                resCard.style.display = 'none';
+                return;
+            }
+            resCard.style.display = 'block';
+            const matches = myLibrarySongs.filter(s => s.title.toLowerCase().includes(query.toLowerCase()));
+            if(matches.length === 0) {
+                resList.innerHTML = `<p style="font-size:10px; color:#64748b;">Tidak ditemukan lagu dengan kata kunci "${query}"</p>`;
+            } else {
+                resList.innerHTML = matches.map(m => `
+                    <div style="background:#020617; border:1px solid #1e293b; padding:8px; border-radius:8px; font-size:11px; color:#f8fafc; display:flex; align-items:center; gap:6px;">
+                        <i data-lucide="music" class="w-3.5 h-3.5 text-emerald-400"></i> ${m.title} (${m.duration})
+                    </div>
+                `).join('');
+                setTimeout(() => lucide.createIcons(), 50);
+            }
+        }
+    </script>
+</body>
+</html>
